@@ -1,0 +1,31 @@
+Vars[
+    Entero x = 10;
+    Caracter c = "c";
+    Cadena cad = "Cadena";
+    Real r = 420.69;
+    Boleado aux = Verdadero;
+]
+
+Inicio[
+Importacion chaomei;
+    x = 5-(5*(x+5));
+    Ysi (Verdadero){
+        Mostrar("Funcion If");
+        Mientras(Verdadero){
+            Leer(cad);
+        };
+    }
+    Osi{
+        Mostrar("Funcion Else");
+        Para(r; Verdadero; 69){
+            Mostrar("Funcion For");
+            Mostrar("hola profe");
+        };
+        Ysi(Falso){
+               r = r + x;
+        };
+    };
+    Mientras(Verdadero){
+          Devuelve  Mostrar("Ciclo While");
+    }
+]

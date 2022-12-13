@@ -1,0 +1,67 @@
+# depslib dependency file v1.0
+1670919569 source:c:\users\itach\desktop\compilador\compilador\main.c
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<stdlib.h>
+	<ctype.h>
+	<conio.h>
+	"Automata.h"
+	"leerTokens.h"
+	"Sintaxis.h"
+	"Tokens.h"
+
+1670920292 c:\users\itach\desktop\compilador\compilador\automata.h
+	"Tokens.h"
+
+1670918721 c:\users\itach\desktop\compilador\compilador\leertokens.h
+
+1670919033 c:\users\itach\desktop\compilador\compilador\sintaxis.h
+
+1670920755 c:\users\itach\desktop\compilador\compilador\tokens.h
+
+1670919573 source:c:\users\itach\desktop\compilador\compilador\leertokens.c
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<stdlib.h>
+	<ctype.h>
+	<conio.h>
+	"Automata.h"
+	"leerTokens.h"
+	"Sintaxis.h"
+	"Tokens.h"
+
+1670920498 source:c:\users\itach\desktop\compilador\compilador\sintaxis.c
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<stdlib.h>
+	<ctype.h>
+	<conio.h>
+	"Automata.h"
+	"leerTokens.h"
+	"Sintaxis.h"
+	"Tokens.h"
+
+1670920452 source:c:\users\itach\desktop\compilador\compilador\tokens.c
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<stdlib.h>
+	<ctype.h>
+	<conio.h>
+	"Tokens.h"
+
+1670919560 source:c:\users\itach\desktop\compilador\compilador\automata.c
+	<stdio.h>
+	<string.h>
+	<stdbool.h>
+	<stdlib.h>
+	<ctype.h>
+	<conio.h>
+	"Automata.h"
+	"leerTokens.h"
+	"Sintaxis.h"
+	"Tokens.h"
+
