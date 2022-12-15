@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
             printf("---------------------------------\n");
             leerTokens(strArchivo);
 
-            imprimirLista(raiz);
+            //imprimirLista(raiz);
 
             analizadorLexico(raiz);
         }

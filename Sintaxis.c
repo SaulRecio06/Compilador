@@ -10,12 +10,17 @@
 #include "Tokens.h"
 
 
-
-
 struct nodo *sintaxisExp(struct nodo *reco, int edo){
     if ( edo == 1 ){
         if ( reco->info.tipo == ID || reco->info.tipo == Num ){
-           
+            /*if(strcmp(reco->info.lexema, ";")){
+                edo = 5;
+                sintaxisExp(reco, edo);
+            }
+            else{
+                edo = 2;
+                sintaxisExp(reco->der, edo);
+            }*/
             edo = 2;
             sintaxisExp(reco->der, edo);
         }
@@ -23,9 +28,12 @@ struct nodo *sintaxisExp(struct nodo *reco, int edo){
             edo = 3;
             sintaxisExp(reco->der, edo);
         }
-     
+        /*else if(strcmp(reco->info.lexema, ";")){
+            edo = 5;
+            sintaxisExp(reco, edo);
+        }*/
         else {
-            printf("Error de sintaxis: Se esperaba un Identificador, un Numero o un parentesis en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Se esperaba un Identificador, un Número o un paréntesis en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     }
     else if ( edo == 2 ) {
@@ -41,11 +49,12 @@ struct nodo *sintaxisExp(struct nodo *reco, int edo){
             sintaxisExp(reco, edo);
         }
         else {
-            printf("Error de sintaxis: Se esperaba un simbolo operador en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Se esperaba un símbolo operador en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     }
     else if ( edo == 3 ) {
         edo = 1;
+        //struct nodo *recoAux = sintaxisExp(reco, edo);
         reco = sintaxisExp(reco, edo);
         if(strcmp(reco->info.lexema, ")") == 0){
             edo = 2;
@@ -57,7 +66,7 @@ struct nodo *sintaxisExp(struct nodo *reco, int edo){
     }
     else if ( edo == 5 ) {
         if ( strcasecmp(reco->info.lexema, ";") != 0 ) {
-            printf("321Error de sintaxis: Se esperaba el simbolo Punto y coma ( ; ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("321Error de sintaxis: Se esperaba el símbolo Punto y coma ( ; ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
         else {
             return (reco);
@@ -93,7 +102,7 @@ struct nodo * sintaxisVariable(struct nodo *reco, int edo) {
             sintaxisVariable(reco->der, edo);
         }
         else if(reco->info.tipo == ID) {
-            printf("Error de sintaxis: Una variable solo se puede inicializar con un valor Constante, en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Una variable sólo se puede inicializar con un valor constante, en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
         else {
             printf("Error de sintaxis: Debe asignarse un valor a la variable en linea %d columna %d", reco->info.numLin, reco->info.numCol);
@@ -110,11 +119,11 @@ struct nodo * sintaxisVariable(struct nodo *reco, int edo) {
 struct nodo * sintaxisConstante(struct nodo *reco, int edo) {
 
     if( edo == 1 ) {
-        if ( strcasecmp(reco->info.lexema, "Constante") == 0) {
+        if ( strcasecmp(reco->info.lexema, "constante") == 0) {
             edo = 2;
             sintaxisConstante(reco->der, edo);
         } else {
-            printf("Error de sintaxis: Se esperaba la palabra (Constante) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Se esperaba la palabra (constante) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     }else if ( edo == 2 ){
         if( reco->info.tipo == TipoDato) {
@@ -175,6 +184,7 @@ struct nodo *sintaxisLeer(struct nodo *reco, int edo){
             printf("Error de sintaxis: Se esperaba el simbolo Parentesis de apertura ( ( )  en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 3 ) {
+        //printf(reco->info.lexema);
         if ( reco->info.tipo == 1 ){ //Espera recibir un identificador
             edo = 4;
             sintaxisLeer(reco->der, edo);
@@ -239,6 +249,7 @@ struct nodo *sintaxisEscribir(struct nodo *reco, int edo){
     }
 }
 
+// TODO: Add Expresión.
 struct nodo *sintaxisAsignar(struct nodo *reco, int edo) {
     if ( edo == 1 ) {
         if ( reco->info.tipo == ID ) { //Espera un ID
@@ -255,11 +266,21 @@ struct nodo *sintaxisAsignar(struct nodo *reco, int edo) {
             printf("Error de sintaxis: Se esperaba el simbolo de Asignacion ( = ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 3 ) {
+        //printf("\n %d %d\n", reco->info.tipo,  strcmp(reco->der->info.lexema, "-"));
         if(reco->info.tipo == ID || strcasecmp(reco->info.lexema, "(") == 0 || ((reco->info.tipo == Num || reco->info.tipo == Cadena) && (strcmp(reco->der->info.lexema, "+") == 0 || strcmp(reco->der->info.lexema, "-") == 0 || strcmp(reco->der->info.lexema, "*") == 0 || strcmp(reco->der->info.lexema, "/") == 0 || strcmp(reco->der->info.lexema, "(") == 0))) {
+            //struct nodo *recoAux = sintaxisExp(reco, 1);
             edo = 4;
             struct nodo *recoAux = sintaxisExp(reco, 1);
             sintaxisAsignar(recoAux, edo);
-           
+            //*reco = *sintaxisExp(reco, 1);
+            /*if(strcmp(recoAux->info.lexema, ";") == 0){
+                edo = 4;
+                sintaxisAsignar(reco, edo);
+            }
+            else{
+                printf("\n %d %s\n", reco->info.tipo, reco->der->info.lexema);
+                printf("123 Error de sintaxis: Se esperaba el simbolo Punto y coma ( ; ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            }*/
         }
         else if((reco->info.tipo == Cadena) || (reco->info.tipo == Num) || (reco->info.tipo == Booleano)){
             //Espera recibir una Cadena en tipo 5 o un numero en tipo 2
@@ -267,7 +288,7 @@ struct nodo *sintaxisAsignar(struct nodo *reco, int edo) {
             sintaxisAsignar(reco->der, edo);
         }
         else {
-                printf("Error de sintaxis: Se esperaba una asignacion en la linea %d columna %d", reco->info.numLin, reco->info.numCol);
+                printf("Error de sintaxis: Se esperaba una asignación en la linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 4 ) {
         if ( strcasecmp(reco->info.lexema, ";") != 0 ) {
@@ -294,8 +315,8 @@ struct nodo *sintaxisSino(struct nodo *reco, int edo) {
             printf("Error de sintaxis: Se esperaba el simbolo Llave de apertura ( { ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 3 ) {
-        //Espacio para cualquier tipo de accion
-        if ( strcasecmp(reco->info.lexema, "Ysi" ) == 0 ) {
+        //Espacio para cualquier tipo de acción
+        if ( strcasecmp(reco->info.lexema, "si" ) == 0 ) {
             edo = 3;
             struct nodo *recoAux = sintaxisIf(reco, 1);
             sintaxisSino(recoAux, edo);
@@ -311,15 +332,15 @@ struct nodo *sintaxisSino(struct nodo *reco, int edo) {
             edo = 3;
             struct nodo *recoAux = sintaxisAsignar(reco, 1);
             sintaxisSino(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Mientras" ) == 0 ) {
+        } else if ( strcasecmp(reco->info.lexema, "mientras" ) == 0 ) {
             edo = 3;
             struct nodo *recoAux = sintaxisMientras(reco, 1);
             sintaxisSino(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Para" ) == 0 ) {
+        } else if ( strcasecmp(reco->info.lexema, "para" ) == 0 ) {
             edo = 3;
             struct nodo *recoAux = sintaxisPara(reco, 1);
             sintaxisSino(recoAux, edo);
-        }else {
+        }else {  
             edo = 4;
             sintaxisSino(reco, edo);
         }
@@ -334,6 +355,7 @@ struct nodo *sintaxisSino(struct nodo *reco, int edo) {
 }
 
 struct nodo *sintaxisIf(struct nodo *reco, int edo){
+    //printf(reco->info.lexema);
     if ( edo == 1 ) {
         if ( strcasecmp(reco->info.lexema, "si" ) == 0 ) {
             edo = 2;
@@ -350,7 +372,7 @@ struct nodo *sintaxisIf(struct nodo *reco, int edo){
         }
     } else if ( edo == 3 ) {
         //Espacio para expresion verdadera o falsa
-        if ( (strcasecmp(reco->info.lexema, "Verdadero" ) == 0) ||  (strcasecmp(reco->info.lexema, "Falso" ) == 0) ){
+        if ( (strcasecmp(reco->info.lexema, "verdadero" ) == 0) ||  (strcasecmp(reco->info.lexema, "falso" ) == 0) ){
             edo = 4;
             sintaxisIf(reco->der, edo);
         } else {
@@ -374,10 +396,10 @@ struct nodo *sintaxisIf(struct nodo *reco, int edo){
     } else if ( edo == 6 ) {
         //Espacio para cualquier tipo de accion
 
-        if ( strcasecmp(reco->info.lexema, "Ysi" ) == 0 ) {
+        if ( strcasecmp(reco->info.lexema, "si" ) == 0 ) {
             edo = 6;
             struct nodo *recoAux = sintaxisIf(reco, 1);
-            sintaxisIf(recoAux, edo);
+            sintaxisIf(recoAux, edo);						 
         } else if ( strcasecmp(reco->info.lexema, "Leer" ) == 0 ) {
             edo = 6;
             struct nodo *recoAux = sintaxisLeer(reco, 1);
@@ -390,19 +412,20 @@ struct nodo *sintaxisIf(struct nodo *reco, int edo){
             edo = 6;
             struct nodo *recoAux = sintaxisAsignar(reco, 1);
             sintaxisIf(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Mientras" ) == 0 ){
+        } else if ( strcasecmp(reco->info.lexema, "mientras" ) == 0 ){
             edo = 6;
             struct nodo *recoAux = sintaxisMientras(reco, 1);
             sintaxisIf(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Para" ) == 0 ) {
+        } else if ( strcasecmp(reco->info.lexema, "para" ) == 0 ) {
             edo = 6;
             struct nodo *recoAux = sintaxisPara(reco, 1);
             sintaxisIf(recoAux, edo);
-        }else {
+        }else { 
             edo = 7;
             sintaxisIf(reco, edo);
         }
     } else if ( edo == 7 ) {
+        //printf(reco->info.lexema);
         if ( (strcasecmp(reco->info.lexema, "}" ) == 0) && (strcasecmp(reco->der->info.lexema, "sino" ) == 0) ) {
             edo = 8;
             struct nodo *recoAux = sintaxisSino(reco->der, 1);
@@ -411,9 +434,9 @@ struct nodo *sintaxisIf(struct nodo *reco, int edo){
             edo = 8;
             sintaxisIf(reco->der, edo);
         }else {
-            printf("Error de sintaxis: Se esperaba el simbolo Llave de cierre ( } ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
-        }
-    } else if ( edo == 8 ) {
+            printf("Error de sintaxis: Se esperaba el simbolo Llave de cierre ( } ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);																																	   
+        }		 
+    } else if ( edo == 8 ) {							 
         if ( strcasecmp(reco->info.lexema, ";") != 0 ) {
             printf("Error de sintaxis: Se esperaba el simbolo Punto y coma ( ; ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         } else {
@@ -424,11 +447,11 @@ struct nodo *sintaxisIf(struct nodo *reco, int edo){
 
 struct nodo *sintaxisMientras(struct nodo *reco, int edo) {
     if ( edo == 1 ) {
-        if ( strcasecmp(reco->info.lexema, "Mientras") == 0 ) {
+        if ( strcasecmp(reco->info.lexema, "mientras") == 0 ) {
             edo = 2;
             sintaxisMientras(reco->der, edo);
         } else {
-            printf("Error de sintaxis: Se esperaba la palabra ( Mientras ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Se esperaba la palabra ( mientras ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 2 ) {
         if ( strcasecmp(reco->info.lexema, "(") == 0 ) {
@@ -438,7 +461,7 @@ struct nodo *sintaxisMientras(struct nodo *reco, int edo) {
             printf("Error de sintaxis: Se esperaba el simbolo Parentesis de apertura ( ( ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 3 ) {
-        if ( (strcasecmp(reco->info.lexema, "Verdadero" ) == 0) ||  (strcasecmp(reco->info.lexema, "Falso" ) == 0) ){
+        if ( (strcasecmp(reco->info.lexema, "verdadero" ) == 0) ||  (strcasecmp(reco->info.lexema, "falso" ) == 0) ){
             edo = 4;
             sintaxisIf(reco->der, edo);
         } else {
@@ -459,12 +482,12 @@ struct nodo *sintaxisMientras(struct nodo *reco, int edo) {
             printf("Error de sintaxis: Se esperaba el simbolo Llave de apertura ( { ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 6 ) {
-        //Espacio para cualquier tipo de accion
-        if ( strcasecmp(reco->info.lexema, "Mientras" ) == 0 ) {
+        //Espacio para cualquier tipo de acción
+        if ( strcasecmp(reco->info.lexema, "mientras" ) == 0 ) {
             edo = 6;
             struct nodo *recoAux = sintaxisMientras(reco, 1);
             sintaxisMientras(recoAux, edo);
-        }else if ( strcasecmp(reco->info.lexema, "Ysi" ) == 0 ) {
+        }else if ( strcasecmp(reco->info.lexema, "si" ) == 0 ) {
             edo = 6;
             struct nodo *recoAux = sintaxisIf(reco, 1);
             sintaxisMientras(recoAux, edo);
@@ -480,7 +503,7 @@ struct nodo *sintaxisMientras(struct nodo *reco, int edo) {
             edo = 6;
             struct nodo *recoAux = sintaxisAsignar(reco, 1);
             sintaxisMientras(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Para" ) == 0 ){
+        } else if ( strcasecmp(reco->info.lexema, "para" ) == 0 ){
             edo = 6;
             struct nodo *recoAux = sintaxisPara(reco, 1);
             sintaxisMientras(recoAux, edo);
@@ -507,11 +530,11 @@ struct nodo *sintaxisMientras(struct nodo *reco, int edo) {
 
 struct nodo *sintaxisPara(struct nodo *reco, int edo){
     if ( edo == 1 ) {
-        if ( strcasecmp(reco->info.lexema, "Para" ) == 0 ) {
+        if ( strcasecmp(reco->info.lexema, "para" ) == 0 ) {
             edo = 2;
             sintaxisPara(reco->der, edo);
         } else {
-            printf("Error de sintaxis: Se esperaba la palabra ( Para ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Se esperaba la palabra ( para ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 2 ) {
         if (strcasecmp(reco->info.lexema, "(") == 0) {
@@ -535,7 +558,7 @@ struct nodo *sintaxisPara(struct nodo *reco, int edo){
             printf("Error de sintaxis: Se esperaba el simbolo Punto y coma ( ; ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 5 ){
-        if ( (strcasecmp(reco->info.lexema, "Verdadero" ) == 0) ||  (strcasecmp(reco->info.lexema, "Falso" ) == 0) ) {
+        if ( (strcasecmp(reco->info.lexema, "verdadero" ) == 0) ||  (strcasecmp(reco->info.lexema, "falso" ) == 0) ) {
             edo = 6;
             sintaxisPara(reco->der, edo);
         } else {
@@ -572,15 +595,15 @@ struct nodo *sintaxisPara(struct nodo *reco, int edo){
     } else if ( edo == 10 ) {
         //Espacio para cualquier tipo de accion
 
-        if ( strcasecmp(reco->info.lexema, "Para" ) == 0 ) {
+        if ( strcasecmp(reco->info.lexema, "para" ) == 0 ) {
             edo = 10;
             struct nodo *recoAux = sintaxisPara(reco, 1);
             sintaxisPara(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Mientras" ) == 0 ) {
+        } else if ( strcasecmp(reco->info.lexema, "mientras" ) == 0 ) {
             edo = 10;
             struct nodo *recoAux = sintaxisMientras(reco, 1);
             sintaxisPara(recoAux, edo);
-        }else if ( strcasecmp(reco->info.lexema, "Ysi" ) == 0 ) {
+        }else if ( strcasecmp(reco->info.lexema, "si" ) == 0 ) {
             edo = 10;
             struct nodo *recoAux = sintaxisIf(reco, 1);
             sintaxisPara(recoAux, edo);
@@ -619,11 +642,11 @@ struct nodo *sintaxisPara(struct nodo *reco, int edo){
 
 void sintaxisPrograma(struct nodo *reco, int edo){
     if ( edo == 1 ) {
-        if ( strcasecmp(reco->info.lexema, "Vars") == 0 )  {
+        if ( strcasecmp(reco->info.lexema, "declaracion") == 0 )  {
             edo = 2;
             sintaxisPrograma(reco->der, edo);
         } else {
-            printf("Error de sintaxis: Se esperaba la palabra (Vars) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Se esperaba la palabra (declaracion) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 2 ) {
         if ( strcasecmp(reco->info.nombre, "CorcheteIzq") == 0){
@@ -635,33 +658,37 @@ void sintaxisPrograma(struct nodo *reco, int edo){
     } else if ( edo == 3 ){
         if ( reco->info.tipo == TipoDato ){ //Detecta un tipo de dato
             edo = 3;
-          
+            //printf(recoAux->info.lexema);
+            //printf("\n");
             struct nodo *recoAux = sintaxisVariable(reco, 1);
             sintaxisPrograma(recoAux, edo);
 
-        } else if ( strcasecmp(reco->info.lexema, "Constante" ) == 0) {
+        } else if ( strcasecmp(reco->info.lexema, "constante" ) == 0) {
             edo = 3;
             struct nodo *recoAux = sintaxisConstante(reco, 1);
             sintaxisPrograma(recoAux, edo);
         } else if ( strcasecmp(reco->info.nombre, "CorcheteDer") == 0 ){
             edo = 4;
             sintaxisPrograma(reco, edo);
-        } else if ( ( reco->info.tipo != 4 ) || ( strcasecmp(reco->info.lexema, "Constante" ) != 0) ){
-            printf("Error de sintaxis: Se esperaba un Tipo de Dato o la palabra (Constante) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+        } else if ( ( reco->info.tipo != 4 ) || ( strcasecmp(reco->info.lexema, "constante" ) != 0) ){
+            printf("Error de sintaxis: Se esperaba un Tipo de Dato o la palabra (constante) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 4 ) {
+        //printf(reco->info.lexema);
         if ( strcasecmp(reco->info.nombre, "CorcheteDer") == 0) {
             edo = 5;
             sintaxisPrograma(reco->der, edo);
         } else {
+            //printf("Estado 4 \n");
             printf("Error de sintaxis: Se esperaba el simbolo Corchete de cierre ( ] ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 5 ){
-        if ( strcasecmp(reco->info.lexema, "Inicio") == 0){
+        //printf(reco->info.lexema);
+        if ( strcasecmp(reco->info.lexema, "principal") == 0){
             edo = 6;
             sintaxisPrograma(reco->der, edo);
         } else {
-            printf("Error de sintaxis: Se esperaba la palabra (Inicio) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
+            printf("Error de sintaxis: Se esperaba la palabra (principal) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
         }
     } else if ( edo == 6) {
         if(reco->der == NULL){
@@ -678,6 +705,7 @@ void sintaxisPrograma(struct nodo *reco, int edo){
         if ( strcasecmp(reco->info.lexema, "Leer") == 0 ) {
             edo = 7;
             struct nodo *recoAux = sintaxisLeer(reco, 1);
+            //printf(recoAux->info.lexema);
             if(recoAux == NULL){
                 edo = 8;
                 sintaxisPrograma(NULL, edo);
@@ -702,7 +730,7 @@ void sintaxisPrograma(struct nodo *reco, int edo){
             }
             else
                 sintaxisPrograma(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Ysi") == 0 ){
+        } else if ( strcasecmp(reco->info.lexema, "si") == 0 ){
             edo = 7;
             struct nodo *recoAux = sintaxisIf(reco, 1);
             if(recoAux == NULL){
@@ -711,7 +739,7 @@ void sintaxisPrograma(struct nodo *reco, int edo){
             }
             else
                 sintaxisPrograma(recoAux, edo);
-        }else if ( strcasecmp(reco->info.lexema, "Mientras") == 0 ){
+        }else if ( strcasecmp(reco->info.lexema, "mientras") == 0 ){
             edo = 7;
             struct nodo *recoAux = sintaxisMientras(reco, 1);
             if(recoAux == NULL){
@@ -720,7 +748,7 @@ void sintaxisPrograma(struct nodo *reco, int edo){
             }
             else
                 sintaxisPrograma(recoAux, edo);
-        } else if ( strcasecmp(reco->info.lexema, "Para") == 0 ){
+        } else if ( strcasecmp(reco->info.lexema, "para") == 0 ){
             edo = 7;
             struct nodo *recoAux = sintaxisPara(reco, 1);
             if(recoAux == NULL){
@@ -734,12 +762,14 @@ void sintaxisPrograma(struct nodo *reco, int edo){
             sintaxisPrograma(reco, edo);
         }
     } else {
-       
+        //printf("Estado 8\n");
+        //printf(reco->info.lexema);
+        //if ( strcasecmp(reco->info.nombre, "CorcheteDer") != 0 ){
         if ( reco == NULL ){
+            //printf("Error de sintaxis: Se esperaba el simbolo Corchete de cierre ( ] ) en linea %d columna %d", reco->info.numLin, reco->info.numCol);
             printf("Error de sintaxis: Se esperaba el simbolo Corchete de cierre ( ] ) en la ultima linea");
         } else {
-            printf("Analisis sintactico correcto");
+            printf("Analisis sintactico correcto, FELICIDADEEEES");
         }
     }
 }
-

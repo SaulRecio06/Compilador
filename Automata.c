@@ -74,7 +74,7 @@ bool esTerminador(char c, struct Token *token){
 }
 
 bool tipoDato(char* str, struct Token *token){
-    if(strcmp(str,"Entero") == 0 || strcmp(str,"Real") == 0 || strcmp(str,"Cadena") == 0 || strcmp(str,"Caracter") == 0 || strcmp(str,"Boleado") == 0){
+    if(strcmp(str,"entero") == 0 || strcmp(str,"real") == 0 || strcmp(str,"cadena") == 0 || strcmp(str,"caracter") == 0 || strcmp(str,"booleano") == 0){
         strcpy(token->lexema, str);
         token->tipo = TipoDato;
         token->valor = 0;
@@ -154,10 +154,9 @@ bool esNumero(char* str, struct Token *token){
 }
 
 bool palReservada(char* str, struct Token *token){
-    if(strcmp(str, "Vars") == 0 || strcmp(str, "Inicio") == 0 || strcmp(str, "Regresa") == 0 || strcmp(str, "Mostrar") == 0 ||
-       strcmp(str, "Leer") == 0  || strcmp(str, "Ysi") == 0  || strcmp(str, "Entonces") == 0  || strcmp(str, "Para") == 0  || 
-       strcmp(str, "Mientras") == 0 || strcmp(str, "Osi") == 0 || strcmp(str, "Vacio") == 0 || strcmp(str, "Clase") == 0 || 
-       strcmp(str, "Descanso") == 0 || strcmp(str, "Importacion") == 0 || strcmp(str, "Devuelve") == 0){
+    if(strcmp(str, "declaracion") == 0 || strcmp(str, "principal") == 0 || strcmp(str, "regresa") == 0 || strcmp(str, "Mostrar") == 0 ||
+       strcmp(str, "Leer") == 0  || strcmp(str, "si") == 0  || strcmp(str, "entonces") == 0  || strcmp(str, "para") == 0  || 
+       strcmp(str, "mientras") == 0 || strcmp(str, "sino") == 0){
         strcpy(token->lexema, str);
         token->tipo = PalRes;
         strcpy(token->nombre, "Instruccion");
@@ -168,7 +167,7 @@ bool palReservada(char* str, struct Token *token){
 }
 
 bool esBool(char* str, struct Token *token){
-    if(strcmp(str, "Verdadero") == 0 || strcmp(str, "Falso") == 0){
+    if(strcmp(str, "verdadero") == 0 || strcmp(str, "falso") == 0){
         strcpy(token->lexema, str);
         token->tipo = Booleano;
         strcpy(token->nombre, str);

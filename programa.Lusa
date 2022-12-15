@@ -1,0 +1,47 @@
+declaracion[
+    
+    caracter c = "c";
+    cadena cad = "cadena";
+    real r = 420.69;
+    booleano aux = verdadero;
+]
+principal
+
+
+[
+    si (verdadero){
+    };
+
+
+
+    si (verdadero){
+    };
+
+
+    si (falso){
+    };
+
+
+    si (verdadero){
+    };
+
+
+    si(falso){};
+
+
+
+
+    si (verdadero){
+        mientras(verdadero){
+            Leer(cad);
+        }; 
+    }
+    sino{
+        para(r; verdadero; 69){
+            Mostrar("hola mundo");
+        };
+        si(falso){
+               r = r + x;
+       };
+    };
+]
